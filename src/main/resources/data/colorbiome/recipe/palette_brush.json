@@ -1,0 +1,30 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "key": {
+    "B": {
+      "item": "minecraft:brush"
+    },
+    "E": {
+      "item": "minecraft:grass_block"
+    },
+    "F": {
+      "item": "minecraft:blaze_powder"
+    },
+    "W": {
+      "item": "minecraft:heart_of_the_sea"
+    },
+    "A": {
+      "item": "minecraft:wind_charge"
+    }
+  },
+  "pattern": [
+    " A ",
+    "FBW",
+    " E "
+  ],
+  "result": {
+    "count": 1,
+    "id": "colorbiome:palette_brush"
+  }
+}

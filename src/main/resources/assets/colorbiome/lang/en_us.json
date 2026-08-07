@@ -1,0 +1,18 @@
+{
+  "itemGroup.colorbiome": "ColorBiome",
+  "item.colorbiome.palette_brush": "Palette Brush",
+  "screen.colorbiome.palette_brush.title": "Palette Brush",
+  "screen.colorbiome.palette_brush.vegetation": "Vegetation: %s",
+  "screen.colorbiome.palette_brush.water": "Water: %s",
+  "screen.colorbiome.palette_brush.active_vegetation": "Choosing vegetation biome",
+  "screen.colorbiome.palette_brush.active_water": "Choosing water biome",
+  "screen.colorbiome.palette_brush.biomes": "Biomes",
+  "screen.colorbiome.palette_brush.search": "Search biomes...",
+  "screen.colorbiome.palette_brush.empty": "No matching biomes",
+  "screen.colorbiome.palette_brush.confirm": "Confirm",
+  "screen.colorbiome.palette_brush.height": "Vertical range",
+  "screen.colorbiome.palette_brush.above": "Above",
+  "screen.colorbiome.palette_brush.below": "Below",
+  "screen.colorbiome.palette_brush.to_world_ceiling": "To world ceiling",
+  "screen.colorbiome.palette_brush.to_world_floor": "To world floor"
+}

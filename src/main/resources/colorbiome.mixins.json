@@ -1,0 +1,11 @@
+{
+  "required": true,
+  "package": "com.agent314.colorbiome.mixin",
+  "compatibilityLevel": "JAVA_21",
+  "client": [
+    "BiomeColorsMixin"
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  }
+}
