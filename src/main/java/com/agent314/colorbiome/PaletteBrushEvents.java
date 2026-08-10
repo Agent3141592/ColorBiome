@@ -1,7 +1,7 @@
 package com.agent314.colorbiome;
 
 import net.neoforged.bus.api.SubscribeEvent;
-import net.neoforged.neoforge.common.util.TriState;
+import net.minecraft.util.TriState;
 import net.neoforged.neoforge.event.entity.player.PlayerInteractEvent;
 import net.neoforged.neoforge.event.entity.player.PlayerEvent;
 import net.minecraft.server.level.ServerPlayer;
@@ -44,7 +44,7 @@ public final class PaletteBrushEvents {
     @SubscribeEvent
     public static void onPlayerChangedDimension(PlayerEvent.PlayerChangedDimensionEvent event) {
         if (event.getEntity() instanceof ServerPlayer player) {
-            PaletteBrushZones.syncTo(player, event.getTo().location());
+            PaletteBrushZones.syncTo(player, event.getTo().identifier());
         }
     }
 }

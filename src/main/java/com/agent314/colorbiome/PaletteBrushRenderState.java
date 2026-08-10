@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import net.minecraft.core.BlockPos;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.level.Level;
 
 public final class PaletteBrushRenderState {
@@ -35,7 +35,7 @@ public final class PaletteBrushRenderState {
     public static BiomePalette vegetationAt(Level level, BlockPos position) {
         for (int index = ZONES.size() - 1; index >= 0; index--) {
             PaletteBrushZone zone = ZONES.get(index);
-            if (zone.contains(level.dimension().location(), position.getX(), position.getY(), position.getZ())) {
+            if (zone.contains(level.dimension().identifier(), position.getX(), position.getY(), position.getZ())) {
                 return zone.vegetation();
             }
         }
@@ -45,7 +45,7 @@ public final class PaletteBrushRenderState {
     public static BiomePalette waterAt(Level level, BlockPos position) {
         for (int index = ZONES.size() - 1; index >= 0; index--) {
             PaletteBrushZone zone = ZONES.get(index);
-            if (zone.contains(level.dimension().location(), position.getX(), position.getY(), position.getZ())) {
+            if (zone.contains(level.dimension().identifier(), position.getX(), position.getY(), position.getZ())) {
                 return zone.water();
             }
         }

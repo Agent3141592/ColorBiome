@@ -3,41 +3,39 @@ package com.agent314.colorbiome;
 import java.util.ArrayList;
 import java.util.List;
 
-import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
-import net.minecraft.nbt.Tag;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.world.level.saveddata.SavedData;
+import net.minecraft.world.level.saveddata.SavedDataType;
 
 public final class PaletteBrushSavedData extends SavedData {
     private static final String FILE_ID = ColorBiome.MODID + "_palette_zones";
     private static final String ZONES_TAG = "zones";
+    private static final SavedDataType<PaletteBrushSavedData> TYPE = new SavedDataType<>(
+            Identifier.fromNamespaceAndPath(ColorBiome.MODID, FILE_ID), PaletteBrushSavedData::new,
+            CompoundTag.CODEC.xmap(PaletteBrushSavedData::load, PaletteBrushSavedData::save));
 
     private final List<PaletteBrushZone> zones = new ArrayList<>();
 
     public static PaletteBrushSavedData get(MinecraftServer server) {
-        return server.overworld().getDataStorage().computeIfAbsent(factory(), FILE_ID);
+        return server.overworld().getDataStorage().computeIfAbsent(TYPE);
     }
 
-    private static SavedData.Factory<PaletteBrushSavedData> factory() {
-        return new SavedData.Factory<>(PaletteBrushSavedData::new, PaletteBrushSavedData::load);
-    }
-
-    private static PaletteBrushSavedData load(CompoundTag tag, HolderLookup.Provider provider) {
+    private static PaletteBrushSavedData load(CompoundTag tag) {
         PaletteBrushSavedData data = new PaletteBrushSavedData();
-        ListTag zonesTag = tag.getList(ZONES_TAG, Tag.TAG_COMPOUND);
+        ListTag zonesTag = tag.getListOrEmpty(ZONES_TAG);
 
         for (int index = 0; index < zonesTag.size(); index++) {
-            data.zones.add(loadZone(zonesTag.getCompound(index)));
+            data.zones.add(loadZone(zonesTag.getCompoundOrEmpty(index)));
         }
 
         return data;
     }
 
-    @Override
-    public CompoundTag save(CompoundTag tag, HolderLookup.Provider provider) {
+    private CompoundTag save() {
+        CompoundTag tag = new CompoundTag();
         ListTag zonesTag = new ListTag();
 
         for (PaletteBrushZone zone : zones) {
@@ -53,7 +51,7 @@ public final class PaletteBrushSavedData extends SavedData {
         setDirty();
     }
 
-    public List<PaletteBrushZone> zonesFor(ResourceLocation dimension) {
+    public List<PaletteBrushZone> zonesFor(Identifier dimension) {
         return zones.stream()
                 .filter(zone -> zone.dimension().equals(dimension))
                 .toList();
@@ -75,14 +73,11 @@ public final class PaletteBrushSavedData extends SavedData {
 
     private static PaletteBrushZone loadZone(CompoundTag tag) {
         return new PaletteBrushZone(
-                ResourceLocation.parse(tag.getString("dimension")),
-                tag.getInt("min_x"),
-                tag.getInt("max_x"),
-                tag.getInt("min_y"),
-                tag.getInt("max_y"),
-                tag.getInt("min_z"),
-                tag.getInt("max_z"),
-                BiomePalette.fromStoredId(tag.getString("vegetation")),
-                BiomePalette.fromStoredId(tag.getString("water")));
+                Identifier.parse(tag.getStringOr("dimension", "minecraft:overworld")),
+                tag.getIntOr("min_x", 0), tag.getIntOr("max_x", 0),
+                tag.getIntOr("min_y", 0), tag.getIntOr("max_y", 0),
+                tag.getIntOr("min_z", 0), tag.getIntOr("max_z", 0),
+                BiomePalette.fromStoredId(tag.getStringOr("vegetation", "minecraft:plains")),
+                BiomePalette.fromStoredId(tag.getStringOr("water", "minecraft:plains")));
     }
 }

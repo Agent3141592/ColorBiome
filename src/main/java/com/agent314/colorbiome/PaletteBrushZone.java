@@ -1,11 +1,11 @@
 package com.agent314.colorbiome;
 
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 
-public record PaletteBrushZone(ResourceLocation dimension, int minX, int maxX, int minY, int maxY, int minZ, int maxZ,
+public record PaletteBrushZone(Identifier dimension, int minX, int maxX, int minY, int maxY, int minZ, int maxZ,
         BiomePalette vegetation, BiomePalette water) {
-    public boolean contains(ResourceLocation currentDimension, int x, int y, int z) {
+    public boolean contains(Identifier currentDimension, int x, int y, int z) {
         return dimension.equals(currentDimension)
                 && x >= minX && x <= maxX
                 && y >= minY && y <= maxY
@@ -26,7 +26,7 @@ public record PaletteBrushZone(ResourceLocation dimension, int minX, int maxX, i
 
     public static PaletteBrushZone read(RegistryFriendlyByteBuf buffer) {
         return new PaletteBrushZone(
-                ResourceLocation.parse(buffer.readUtf()),
+                Identifier.parse(buffer.readUtf()),
                 buffer.readInt(),
                 buffer.readInt(),
                 buffer.readInt(),

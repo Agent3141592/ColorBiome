@@ -1,7 +1,7 @@
 package com.agent314.colorbiome;
 
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.neoforged.neoforge.network.PacketDistributor;
@@ -21,9 +21,9 @@ public final class PaletteBrushZones {
 
             int safeAbove = clampDistance(above);
             int safeBelow = clampDistance(below);
-            int minY = toWorldFloor ? level.getMinBuildHeight() : Math.max(level.getMinBuildHeight(), selection.minY() - safeBelow);
-            int maxY = toWorldCeiling ? level.getMaxBuildHeight() - 1 : Math.min(level.getMaxBuildHeight() - 1, selection.maxY() + safeAbove);
-            PaletteBrushZone zone = new PaletteBrushZone(selection.dimension().location(), selection.minX(), selection.maxX(),
+            int minY = toWorldFloor ? level.getMinY() : Math.max(level.getMinY(), selection.minY() - safeBelow);
+            int maxY = toWorldCeiling ? level.getMaxY() : Math.min(level.getMaxY(), selection.maxY() + safeAbove);
+            PaletteBrushZone zone = new PaletteBrushZone(selection.dimension().identifier(), selection.minX(), selection.maxX(),
                     minY, maxY, selection.minZ(), selection.maxZ(), vegetation, water);
             PaletteBrushSavedData.get(level.getServer()).addZone(zone);
             PacketDistributor.sendToPlayersInDimension(level, new AddPaletteBrushZonePayload(zone));
@@ -32,12 +32,15 @@ public final class PaletteBrushZones {
     }
 
     public static void syncTo(ServerPlayer player) {
-        syncTo(player, player.level().dimension().location());
+        syncTo(player, player.level().dimension().identifier());
     }
 
-    public static void syncTo(ServerPlayer player, ResourceLocation dimension) {
+    public static void syncTo(ServerPlayer player, Identifier dimension) {
+        if (!(player.level() instanceof ServerLevel level)) {
+            return;
+        }
         PacketDistributor.sendToPlayer(player,
-                new SyncPaletteBrushZonesPayload(PaletteBrushSavedData.get(player.server).zonesFor(dimension)));
+                new SyncPaletteBrushZonesPayload(PaletteBrushSavedData.get(level.getServer()).zonesFor(dimension)));
     }
 
     private static int clampDistance(int distance) {
